@@ -11,7 +11,7 @@ Using minimal cd without GUI, Github Release has a 2GB max size limit.
 
 # TODO
 
-- Add `aarch64` format ISO Installer
-- Add `disk.img.gz` for install to Raspberry PI SD Card 
-- Add AWS EC2 image builder
+- [x] ~~Add `aarch64` format ISO Installer~~
+- [ ] Add `disk.img.gz` for install to Raspberry PI SD Card 
+- [ ] Add AWS EC2 image builder
 
