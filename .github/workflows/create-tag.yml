@@ -1,4 +1,4 @@
-name: release
+name: create tag
 on:
   workflow_dispatch:
     inputs:
