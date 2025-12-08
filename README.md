@@ -2,6 +2,7 @@
 
 Download from [Releases](https://github.com/Gao-OS/installer/releases)
 
+- [25.11](https://github.com/Gao-OS/installer/releases/tag/0.3.0)
 - [25.05](https://github.com/Gao-OS/installer/releases/tag/0.2.0)
 - [24.11](https://github.com/Gao-OS/installer/releases/tag/0.1.0)
 - [23.11](https://github.com/Gao-OS/installer/releases/tag/v0.0.1)
