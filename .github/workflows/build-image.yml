@@ -39,6 +39,7 @@ jobs:
         with:
           repository: gao-os/nix-config
           ref: ${{ github.event.inputs.nix-config-ref }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
