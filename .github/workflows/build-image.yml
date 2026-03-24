@@ -53,15 +53,17 @@ jobs:
       - name: Generate checksum
         run: |
           iso_file=$(find result/iso -name '*.iso' -type f | head -1)
-          sha256sum "$iso_file" > "${iso_file}.sha256sum"
+          iso_name=$(basename "$iso_file")
+          sha256sum "$iso_file" | sed "s|.*/|  |" > "${iso_name}.sha256sum"
 
       - name: Upload ISO and checksum to release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           iso_file=$(find result/iso -name '*.iso' -type f | head -1)
+          iso_name=$(basename "$iso_file")
           gh release upload "${{ github.event.inputs.tag }}" \
             "$iso_file" \
-            "${iso_file}.sha256sum" \
+            "${iso_name}.sha256sum" \
             --repo "${{ github.repository }}" \
             --clobber
