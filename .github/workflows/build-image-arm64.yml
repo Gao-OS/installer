@@ -41,12 +41,18 @@ jobs:
       - name: Build ISO image
         run: nix build .#nixosConfigurations.gaoos-installer-arm64.config.system.build.isoImage
 
-      - name: Upload ISO to release
+      - name: Generate checksum
+        run: |
+          iso_file=$(find result/iso -name '*.iso' -type f | head -1)
+          sha256sum "$iso_file" > "${iso_file}.sha256sum"
+
+      - name: Upload ISO and checksum to release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           iso_file=$(find result/iso -name '*.iso' -type f | head -1)
           gh release upload "${{ github.event.inputs.tag }}" \
             "$iso_file" \
+            "${iso_file}.sha256sum" \
             --repo "${{ github.repository }}" \
             --clobber
