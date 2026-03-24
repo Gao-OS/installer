@@ -1,0 +1,51 @@
+name: Build Image (amd64)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: 'The release tag to upload images to'
+        default: '0.4.0'
+      nix-config-ref:
+        required: false
+        description: 'The git ref of nix-config to build from'
+        default: 'main'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build amd64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          df -h
+
+      - name: Clone nix-config
+        uses: actions/checkout@v4
+        with:
+          repository: gao-os/nix-config
+          ref: ${{ github.event.inputs.nix-config-ref }}
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Build ISO image
+        run: nix build .#nixosConfigurations.gaoos-installer-amd64.config.system.build.isoImage
+
+      - name: Upload ISO to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          iso_file=$(find result/iso -name '*.iso' -type f | head -1)
+          gh release upload "${{ github.event.inputs.tag }}" \
+            "$iso_file" \
+            --repo "${{ github.repository }}" \
+            --clobber
